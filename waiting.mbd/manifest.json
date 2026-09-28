@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "manifest": {
+    "id": "com.makemind.sample.waiting_line",
+    "name": "Waiting Line",
+    "version": "1.0.0",
+    "schemaVersion": "1.0.0",
+    "type": "application",
+    "entryPoint": "ui.app",
+    "description": "One queue seen from the door and from the counter.",
+    "provider": "MakeMind",
+    "license": "MIT",
+    "category": "business",
+    "tags": ["queue", "restaurant", "two-screens", "sample"],
+    "publisher": { "name": "makemind.dev", "email": "dev@makemind.dev" }
+  }
+}

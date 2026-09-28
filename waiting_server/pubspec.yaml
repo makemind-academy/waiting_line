@@ -1,0 +1,13 @@
+name: waiting_server
+description: The queue outside a restaurant. Two screens, one state.
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  mcp_server: ^2.1.1
+
+dev_dependencies:
+  lints: ^3.0.0

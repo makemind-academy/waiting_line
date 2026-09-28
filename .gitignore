@@ -1,0 +1,9 @@
+build/
+.dart_tool/
+.flutter-plugins-dependencies
+*.dSYM/
+.DS_Store
+node_modules/
+__pycache__/
+captures/test.out
+captures/_progress.log

@@ -1,0 +1,476 @@
+{
+  "type": "page",
+  "metadata": {
+    "title": "At the counter"
+  },
+  "onInit": {
+    "type": "batch",
+    "actions": [
+      {
+        "type": "resource",
+        "action": "subscribe",
+        "uri": "line://state",
+        "binding": "live"
+      },
+      {
+        "type": "resource",
+        "action": "read",
+        "uri": "line://state",
+        "binding": "live"
+      }
+    ]
+  },
+  "state": {
+    "initial": {
+      "live": {
+        "heads": "",
+        "servedLine": "",
+        "estimate": "",
+        "clock": "",
+        "holdRule": "",
+        "served": "",
+        "nextLabel": "",
+        "rows": [],
+        "parties": "",
+        "avgWaitLabel": ""
+      },
+      "notice": ""
+    }
+  },
+  "content": {
+    "type": "container",
+    "decoration": {
+      "color": "{{theme.color.surfaceContainerHighest}}"
+    },
+    "child": {
+      "type": "linear",
+      "direction": "horizontal",
+      "crossAxisAlignment": "center",
+      "children": [
+        {
+          "type": "container",
+          "padding": {
+            "left": 24,
+            "right": 24,
+            "top": 10,
+            "bottom": 4
+          },
+          "child": {
+            "type": "linear",
+            "direction": "horizontal",
+            "crossAxisAlignment": "center",
+            "children": [
+              {
+                "type": "button",
+                "label": "← Door",
+                "variant": "outlined",
+                "onTap": {
+                  "type": "navigation",
+                  "action": "pop"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "expanded",
+          "flex": 3,
+          "child": {
+            "type": "container",
+            "decoration": {
+              "color": "{{theme.color.surface}}"
+            },
+            "padding": {
+              "all": 24
+            },
+            "child": {
+              "type": "linear",
+              "direction": "vertical",
+              "children": [
+                {
+                  "type": "linear",
+                  "direction": "horizontal",
+                  "crossAxisAlignment": "center",
+                  "children": [
+                    {
+                      "type": "linear",
+                      "direction": "vertical",
+                      "children": [
+                        {
+                          "type": "text",
+                          "content": "HARBOR TABLE",
+                          "style": {
+                            "fontSize": 12,
+                            "color": "{{theme.color.onSurfaceVariant}}",
+                            "letterSpacing": 2.2
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "content": "Counter · host stand",
+                          "style": {
+                            "fontSize": 20,
+                            "color": "{{theme.color.onSurface}}",
+                            "fontWeight": "bold"
+                          }
+                        }
+                      ],
+                      "gap": 4
+                    },
+                    {
+                      "type": "spacer"
+                    },
+                    {
+                      "type": "text",
+                      "content": "{{live.clock}}",
+                      "style": {
+                        "fontSize": 13,
+                        "color": "{{theme.color.onSurfaceVariant}}",
+                        "fontFamily": "JetBrainsMono"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "expanded",
+                  "child": {
+                    "type": "list",
+                    "items": "{{live.rows}}",
+                    "shrinkWrap": true,
+                    "itemSpacing": 8,
+                    "emptyMessage": "Nobody waiting",
+                    "itemTemplate": {
+                      "type": "linear",
+                      "direction": "horizontal",
+                      "crossAxisAlignment": "center",
+                      "children": [
+                        {
+                          "type": "container",
+                          "width": 56,
+                          "alignment": "centerStart",
+                          "child": {
+                            "type": "text",
+                            "content": "{{item.ticket}}",
+                            "textAlign": "start",
+                            "maxLines": 1,
+                            "style": {
+                              "fontSize": 15,
+                              "color": "{{theme.color.primary}}",
+                              "textAlign": "start",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        },
+                        {
+                          "type": "box",
+                          "width": 0
+                        },
+                        {
+                          "type": "expanded",
+                          "child": {
+                            "type": "text",
+                            "content": "{{item.name}}",
+                            "style": {
+                              "fontSize": 16,
+                              "color": "{{theme.color.onSurface}}"
+                            }
+                          }
+                        },
+                        {
+                          "type": "box",
+                          "width": 0
+                        },
+                        {
+                          "type": "container",
+                          "width": 80,
+                          "alignment": "centerEnd",
+                          "child": {
+                            "type": "text",
+                            "content": "{{item.party}}",
+                            "textAlign": "end",
+                            "maxLines": 1,
+                            "style": {
+                              "fontSize": 14,
+                              "color": "{{theme.color.onSurfaceVariant}}",
+                              "textAlign": "end",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        },
+                        {
+                          "type": "box",
+                          "width": 0
+                        },
+                        {
+                          "type": "container",
+                          "width": 90,
+                          "alignment": "centerEnd",
+                          "child": {
+                            "type": "text",
+                            "content": "{{item.waited}}",
+                            "textAlign": "end",
+                            "maxLines": 1,
+                            "style": {
+                              "fontSize": 13,
+                              "color": "{{theme.color.onSurfaceVariant}}",
+                              "textAlign": "end",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "linear",
+                  "direction": "horizontal",
+                  "crossAxisAlignment": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "{{live.holdRule}}",
+                      "style": {
+                        "fontSize": 13,
+                        "color": "{{theme.color.onSurfaceVariant}}"
+                      }
+                    },
+                    {
+                      "type": "spacer"
+                    },
+                    {
+                      "type": "text",
+                      "content": "{{live.heads}} in line",
+                      "style": {
+                        "fontSize": 14,
+                        "color": "{{theme.color.onSurface}}"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "gap": 14,
+              "crossAxisAlignment": "stretch"
+            }
+          }
+        },
+        {
+          "type": "expanded",
+          "flex": 2,
+          "child": {
+            "type": "container",
+            "padding": {
+              "all": 24
+            },
+            "child": {
+              "type": "linear",
+              "direction": "vertical",
+              "children": [
+                {
+                  "type": "container",
+                  "padding": {
+                    "all": 18
+                  },
+                  "decoration": {
+                    "color": "{{theme.color.surface}}",
+                    "borderRadius": 14,
+                    "border": {
+                      "color": "{{theme.color.outline}}",
+                      "width": 1
+                    }
+                  },
+                  "child": {
+                    "type": "linear",
+                    "direction": "vertical",
+                    "children": [
+                      {
+                        "type": "linear",
+                        "direction": "horizontal",
+                        "crossAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "text",
+                            "content": "NEXT UP",
+                            "style": {
+                              "fontSize": 11,
+                              "color": "{{theme.color.onSurfaceVariant}}",
+                              "letterSpacing": 1.6
+                            }
+                          },
+                          {
+                            "type": "spacer"
+                          },
+                          {
+                            "type": "text",
+                            "content": "{{live.parties}} waiting",
+                            "style": {
+                              "fontSize": 12,
+                              "color": "{{theme.color.onSurfaceVariant}}"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "content": "{{live.nextLabel}}",
+                        "style": {
+                          "fontSize": 26,
+                          "color": "{{theme.color.onSurface}}",
+                          "fontFamily": "JetBrainsMono"
+                        }
+                      }
+                    ],
+                    "gap": 8
+                  }
+                },
+                {
+                  "type": "button",
+                  "label": "Seat {{live.nextLabel}}",
+                  "variant": "filled",
+                  "fullWidth": true,
+                  "onTap": {
+                    "type": "tool",
+                    "tool": "line.call",
+                    "params": {}
+                  }
+                },
+                {
+                  "type": "container",
+                  "padding": {
+                    "all": 18
+                  },
+                  "decoration": {
+                    "color": "{{theme.color.surface}}",
+                    "borderRadius": 14,
+                    "border": {
+                      "color": "{{theme.color.outline}}",
+                      "width": 1
+                    }
+                  },
+                  "child": {
+                    "type": "linear",
+                    "direction": "vertical",
+                    "children": [
+                      {
+                        "type": "text",
+                        "content": "THIS SHIFT",
+                        "style": {
+                          "fontSize": 11,
+                          "color": "{{theme.color.onSurfaceVariant}}",
+                          "letterSpacing": 1.6
+                        }
+                      },
+                      {
+                        "type": "linear",
+                        "direction": "horizontal",
+                        "crossAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "text",
+                            "content": "Seated",
+                            "style": {
+                              "fontSize": 13,
+                              "color": "{{theme.color.onSurfaceVariant}}"
+                            }
+                          },
+                          {
+                            "type": "spacer"
+                          },
+                          {
+                            "type": "text",
+                            "content": "{{live.served}}",
+                            "style": {
+                              "fontSize": 15,
+                              "color": "{{theme.color.onSurface}}",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "linear",
+                        "direction": "horizontal",
+                        "crossAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "text",
+                            "content": "Average wait",
+                            "style": {
+                              "fontSize": 13,
+                              "color": "{{theme.color.onSurfaceVariant}}"
+                            }
+                          },
+                          {
+                            "type": "spacer"
+                          },
+                          {
+                            "type": "text",
+                            "content": "{{live.avgWaitLabel}}",
+                            "style": {
+                              "fontSize": 15,
+                              "color": "{{theme.color.onSurface}}",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "linear",
+                        "direction": "horizontal",
+                        "crossAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "text",
+                            "content": "Quoted now",
+                            "style": {
+                              "fontSize": 13,
+                              "color": "{{theme.color.onSurfaceVariant}}"
+                            }
+                          },
+                          {
+                            "type": "spacer"
+                          },
+                          {
+                            "type": "text",
+                            "content": "{{live.estimate}}",
+                            "style": {
+                              "fontSize": 15,
+                              "color": "{{theme.color.onSurfaceVariant}}",
+                              "fontFamily": "JetBrainsMono"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "gap": 10
+                  }
+                },
+                {
+                  "type": "spacer"
+                },
+                {
+                  "type": "text",
+                  "content": "{{live.servedLine}}",
+                  "style": {
+                    "fontSize": 13,
+                    "color": "{{theme.color.onSurfaceVariant}}"
+                  }
+                },
+                {
+                  "type": "text",
+                  "content": "{{notice}}",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "{{theme.color.warning}}"
+                  }
+                }
+              ],
+              "gap": 14,
+              "crossAxisAlignment": "stretch"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

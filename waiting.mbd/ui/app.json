@@ -1,0 +1,41 @@
+{
+  "type": "application",
+  "title": "Waiting Line",
+  "version": "1.0.0",
+  "initialRoute": "/door",
+  "routes": {
+    "/door": "ui://pages/door",
+    "/counter": "ui://pages/counter"
+  },
+  "theme": {
+    "mode": "light",
+    "color": {
+      "primary": "#b4451f",
+      "onPrimary": "#ffffff",
+      "primaryContainer": "#f6ded2",
+      "onPrimaryContainer": "#4a1a08",
+      "surface": "#ffffff",
+      "onSurface": "#1b1613",
+      "surfaceContainerHighest": "#f6f3f0",
+      "onSurfaceVariant": "#8c8079",
+      "outline": "#e8e1db",
+      "outlineVariant": "#f0ebe6",
+      "error": "#b3261e",
+      "onError": "#ffffff",
+      "warning": "#a15c07",
+      "onWarning": "#ffffff",
+      "inverseSurface": "#141110",
+      "inverseOnSurface": "#f2ece8"
+    },
+    "spacing": {
+      "xxs": 2, "xs": 4, "sm": 8, "md": 16, "lg": 24, "xl": 32, "2xl": 48
+    },
+    "shape": {
+      "none": 0, "extraSmall": 4, "small": 8, "medium": 12, "large": 16,
+      "extraLarge": 28, "full": 999
+    },
+    "fonts": {
+      "JetBrainsMono": { "source": "asset", "family": "JetBrainsMono" }
+    }
+  }
+}
