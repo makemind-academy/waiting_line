@@ -9,11 +9,11 @@ the player the reader will use.
 
 Requirements
   * AppPlayer (macOS) with the debug MCP switched on
-    (Settings → Developer → Debug MCP, or `defaults write com.makemind.appplayer
+    (Settings → Developer → Debug MCP, or `defaults write <its bundle id>
     flutter.settings.debug_mcp -bool true` before launch).
   * APPPLAYER_APP   path to AppPlayer.app            (default: /Applications/AppPlayer.app)
   * APPPLAYER_PORT  debug MCP port                   (default: 7931; Pro listens on 7930)
-  * APPPLAYER_DOMAIN preferences domain                (default: com.makemind.appplayer)
+  * APPPLAYER_DOMAIN preferences domain                (default: the app's bundle id)
 
 As a library:
     from appplayer import AppPlayer
@@ -34,19 +34,33 @@ As a command:
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import os
 import plistlib
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
-# Which tier: the Standard player by default; `APPPLAYER_DOMAIN=com.makemind.appplayerPro`
-# with `APPPLAYER_PORT=7930` drives the Pro one, whose preferences live apart.
-DOMAIN = os.environ.get("APPPLAYER_DOMAIN", "com.makemind.appplayer")
 APP = os.environ.get("APPPLAYER_APP", "/Applications/AppPlayer.app")
+
+
+def _bundle_id(app: str) -> str | None:
+    """The player's own identifier: its preferences and bundle store are named after it."""
+    try:
+        with open(os.path.join(app, "Contents", "Info.plist"), "rb") as f:
+            return plistlib.load(f).get("CFBundleIdentifier")
+    except OSError:
+        return None
+
+
+# Which player: the one APPPLAYER_APP points at, whose preferences live under its
+# own identifier (`app.appplayer` for Standard, `app.appplayer.pro` for Pro, which
+# also takes `APPPLAYER_PORT=7930`). APPPLAYER_DOMAIN overrides it.
+DOMAIN = os.environ.get("APPPLAYER_DOMAIN") or _bundle_id(APP) or "app.appplayer"
 PORT = int(os.environ.get("APPPLAYER_PORT", "7931"))
 BUNDLES = os.path.expanduser(f"~/Library/Application Support/{DOMAIN}/bundles")
 
@@ -70,12 +84,59 @@ def _pref_set(key: str, value: str, plist: str = PLIST) -> None:
     subprocess.run(["defaults", "write", plist, f"flutter.{key}", "-string", value], check=True)
 
 
-def _upsert(key: str, entry: dict, plist: str = PLIST) -> None:
+# Fields the player rewrites on its own (connect time, the name a node reports
+# about itself). A registration that differs only in these is the same one.
+_VOLATILE = {"servers.v1": {"createdAt", "lastConnectedAt", "metadata"},
+             "apps.v1": {"name", "metadataJson"}}
+
+
+def _same(key: str, a: dict, b: dict) -> bool:
+    skip = _VOLATILE.get(key, set())
+    return {k: v for k, v in a.items() if k not in skip} == {k: v for k, v in b.items() if k not in skip}
+
+
+def _upsert(key: str, entry: dict, plist: str = PLIST) -> bool:
+    """Write [entry] unless an equal one is already there. Returns whether it wrote."""
     raw = _pref_get(key, plist)
     items = json.loads(raw) if raw else []
+    current = next((i for i in items if i.get("id") == entry["id"]), None)
+    if current is not None and _same(key, current, entry):
+        return False
     items = [i for i in items if i.get("id") != entry["id"]]
     items.append(entry)
     _pref_set(key, json.dumps(items), plist)
+    return True
+
+
+
+def _open_file(port: int) -> str:
+    """The label of the tile a sample left open — samples run in separate
+    processes, so the next one learns it from here."""
+    return os.path.join(tempfile.gettempdir(), f"appplayer-driver-{port}.open")
+
+
+def _remember_open(port: int, label: str) -> None:
+    with open(_open_file(port), "w") as f:
+        f.write(label)
+
+
+def _recall_open(port: int) -> str:
+    try:
+        return open(_open_file(port)).read().strip()
+    except FileNotFoundError:
+        return ""
+
+
+def _tree_digest(root: str) -> str:
+    h = hashlib.sha256()
+    for d, dirs, files in sorted(os.walk(root)):
+        dirs.sort()
+        for f in sorted(files):
+            p = os.path.join(d, f)
+            h.update(os.path.relpath(p, root).encode())
+            with open(p, "rb") as fh:
+                h.update(fh.read())
+    return h.hexdigest()
 
 
 class AppPlayer:
@@ -91,9 +152,10 @@ class AppPlayer:
     def register_server(self, server_id: str, name: str, cwd: str,
                         command: str = "dart", args: list[str] | None = None,
                         description: str = "") -> None:
-        """Register a stdio MCP server as a launcher app. Read at the next launch."""
+        """Register a stdio MCP server as a launcher app. Already registered as is:
+        nothing is written and the running player is kept."""
         now = time.strftime("%Y-%m-%dT%H:%M:%S")
-        _upsert("servers.v1", plist=self.plist, entry={
+        wrote = _upsert("servers.v1", plist=self.plist, entry={
             "id": server_id, "name": name, "description": description,
             "transportType": "stdio",
             "transportConfig": {"command": command,
@@ -101,7 +163,7 @@ class AppPlayer:
                                 "workingDirectory": os.path.abspath(cwd)},
             "createdAt": now, "lastConnectedAt": None, "isFavorite": False, "metadata": None,
         })
-        _upsert("apps.v1", plist=self.plist, entry={
+        wrote |= _upsert("apps.v1", plist=self.plist, entry={
             "id": server_id, "name": name, "type": "server", "serverConfigId": server_id,
             "dashboardLayout": "grid", "dashboardSize": "twoByTwo", "trustLevel": "basic",
         })
@@ -109,12 +171,12 @@ class AppPlayer:
     def register_http_server(self, server_id: str, name: str, base_url: str, description: str = "") -> None:
         """Register a streamable-HTTP MCP server (one process several clients share)."""
         now = time.strftime("%Y-%m-%dT%H:%M:%S")
-        _upsert("servers.v1", plist=self.plist, entry={
+        wrote = _upsert("servers.v1", plist=self.plist, entry={
             "id": server_id, "name": name, "description": description,
             "transportType": "streamableHttp", "transportConfig": {"baseUrl": base_url},
             "createdAt": now, "lastConnectedAt": None, "isFavorite": False, "metadata": None,
         })
-        _upsert("apps.v1", plist=self.plist, entry={
+        wrote |= _upsert("apps.v1", plist=self.plist, entry={
             "id": server_id, "name": name, "type": "server", "serverConfigId": server_id,
             "dashboardLayout": "grid", "dashboardSize": "twoByTwo", "trustLevel": "basic",
         })
@@ -127,13 +189,16 @@ class AppPlayer:
             raw = _pref_get(key, self.plist)
             entries = json.loads(raw) if raw else []
             kept = [e for e in entries if e.get("id") != server_id and e.get("serverConfigId") != server_id]
-            _pref_set(key, json.dumps(kept), self.plist)
+            if len(kept) != len(entries):
+                _pref_set(key, json.dumps(kept), self.plist)
 
     def install_bundle(self, bundle_dir: str) -> str:
         """Copy a .mbd folder into the player's bundle store. Returns its id."""
         man = json.load(open(os.path.join(bundle_dir, "manifest.json")))
         bid = man["manifest"]["id"]
         dst = os.path.join(BUNDLES, bid)
+        if os.path.exists(dst) and _tree_digest(dst) == _tree_digest(bundle_dir):
+            return bid
         if os.path.exists(dst):
             shutil.rmtree(dst)
         shutil.copytree(bundle_dir, dst)
@@ -144,6 +209,60 @@ class AppPlayer:
         return bool(r.stdout.strip())
 
     def restart(self, width: int = 1280, height: int = 900) -> None:
+        """Bring the player to its launcher at [width] x [height], every app closed.
+
+        A running player is reused: back to the launcher, then the tile that was
+        open is disconnected from its context menu (its stdio server exits, the
+        next open starts it fresh). The player is launched only when it is not
+        running."""
+        if self._listening() and self._back_to_launcher():
+            self._disconnect_last()
+            self._resize(width, height)
+            return
+        self._relaunch(width, height)
+
+    def _back_to_launcher(self) -> bool:
+        self.sid = self.path = None
+        for _ in range(6):
+            try:
+                if self.at_launcher():
+                    return True
+                self.home()
+            except Exception:  # noqa: BLE001 — a player that cannot answer gets relaunched
+                return False
+            time.sleep(0.8)
+        return self.at_launcher()
+
+    def _disconnect_last(self) -> None:
+        """Right-click the last opened tile and choose Disconnect."""
+        label = _recall_open(self.port)
+        if not label:
+            return
+        hits = [r for t, r in self.texts(label) if t == label]
+        if hits:
+            r = hits[-1]
+            self._text_result("ui.tap", {"x": r[0] + r[2] / 2, "y": r[1] - 20, "button": "secondary"})
+            for _ in range(10):
+                time.sleep(0.3)
+                if self.has_text("Disconnect"):
+                    self.tap("Disconnect")
+                    break
+        _remember_open(self.port, "")
+
+    def _resize(self, width: int, height: int) -> None:
+        # Move first: a window left against the screen's edge is clipped there
+        # and comes out narrower than asked.
+        subprocess.run(["osascript", "-e",
+                        f'tell application "System Events" to tell process "AppPlayer" '
+                        f'to set position of front window to {{40, 40}}'],
+                       capture_output=True)
+        subprocess.run(["osascript", "-e",
+                        f'tell application "System Events" to tell process "AppPlayer" '
+                        f'to set size of front window to {{{width}, {height}}}'],
+                       capture_output=True)
+        time.sleep(0.5)
+
+    def _relaunch(self, width: int, height: int) -> None:
         """Quit the player that owns the debug port (only that one), launch, resize."""
         r = subprocess.run(["lsof", f"-tiTCP:{self.port}", "-sTCP:LISTEN"], capture_output=True, text=True)
         for pid in r.stdout.split():
@@ -153,7 +272,10 @@ class AppPlayer:
                 break
             time.sleep(0.5)
         subprocess.run(["defaults", "write", self.plist, "flutter.settings.debug_mcp", "-bool", "true"], check=True)
-        subprocess.run(["open", "-n", self.app], check=True)
+        # -g: launch without bringing the player to the front. The gate relaunches it
+        # for every sample; activating it each time takes the keyboard and the
+        # screen away from whoever is working on this machine.
+        subprocess.run(["open", "-g", "-n", self.app], check=True)
         for _ in range(60):
             if self._listening():
                 break
@@ -161,10 +283,7 @@ class AppPlayer:
         else:
             raise SystemExit(f"AppPlayer did not open its debug MCP on {self.port}")
         time.sleep(1.5)
-        subprocess.run(["osascript", "-e",
-                        f'tell application "System Events" to tell process "AppPlayer" '
-                        f'to set size of front window to {{{width}, {height}}}'],
-                       capture_output=True)
+        self._resize(width, height)
         self.sid = self.path = None
 
     # -------------------------------------------------------------------- mcp
@@ -238,6 +357,7 @@ class AppPlayer:
             for _ in range(20):
                 time.sleep(0.5)
                 if not self.at_launcher():
+                    _remember_open(self.port, label)
                     return {"ok": True, "opened": server_id}
         raise AssertionError(f"launcher tile '{label}' did not open")
 
@@ -252,6 +372,7 @@ class AppPlayer:
                 for _ in range(20):
                     time.sleep(0.5)
                     if not self.at_launcher():
+                        _remember_open(self.port, label)
                         return {"ok": True, "opened": label}
                 raise AssertionError(f"tile '{label}' did not open")
             self.drag(drag_x, drag_from_y, drag_x, drag_to_y, hold_ms=0)

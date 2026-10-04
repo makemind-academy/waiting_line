@@ -34,198 +34,263 @@
     }
   },
   "content": {
-    "type": "container",
-    "decoration": {
-      "color": "{{theme.color.surfaceContainerHighest}}"
+    "type": "mediaQuery",
+    "condition": {
+      "minWidth": 600
     },
-    "child": {
-      "type": "linear",
-      "direction": "vertical",
-      "children": [
-        {
-          "type": "container",
-          "padding": {
-            "left": 28,
-            "right": 28,
-            "top": 24,
-            "bottom": 20
-          },
-          "decoration": {
-            "color": "{{theme.color.surface}}",
-            "border": {
-              "bottom": true,
-              "color": "{{theme.color.outline}}",
-              "width": 1
+    "then": {
+      "type": "container",
+      "decoration": {
+        "color": "{{theme.color.surfaceContainerHighest}}"
+      },
+      "child": {
+        "type": "linear",
+        "direction": "vertical",
+        "children": [
+          {
+            "type": "container",
+            "padding": {
+              "left": 28,
+              "right": 28,
+              "top": 24,
+              "bottom": 20
+            },
+            "decoration": {
+              "color": "{{theme.color.surface}}",
+              "border": {
+                "bottom": true,
+                "color": "{{theme.color.outline}}",
+                "width": 1
+              }
+            },
+            "child": {
+              "type": "linear",
+              "direction": "horizontal",
+              "crossAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "linear",
+                  "direction": "vertical",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "HARBOR TABLE",
+                      "style": {
+                        "fontSize": 13,
+                        "color": "{{theme.color.onSurfaceVariant}}",
+                        "letterSpacing": 2.4
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "content": "Front door · walk-ins",
+                      "style": {
+                        "fontSize": 22,
+                        "color": "{{theme.color.onSurface}}",
+                        "fontWeight": "bold"
+                      }
+                    }
+                  ],
+                  "gap": 4
+                },
+                {
+                  "type": "spacer"
+                },
+                {
+                  "type": "linear",
+                  "direction": "vertical",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "SHIFT",
+                      "style": {
+                        "fontSize": 11,
+                        "color": "{{theme.color.onSurfaceVariant}}",
+                        "letterSpacing": 1.6
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "content": "{{live.clock}}",
+                      "style": {
+                        "fontSize": 15,
+                        "color": "{{theme.color.onSurface}}",
+                        "fontFamily": "JetBrainsMono"
+                      }
+                    }
+                  ],
+                  "gap": 4,
+                  "crossAxisAlignment": "end"
+                }
+              ]
             }
           },
-          "child": {
-            "type": "linear",
-            "direction": "horizontal",
-            "crossAxisAlignment": "center",
-            "children": [
-              {
-                "type": "linear",
-                "direction": "vertical",
-                "children": [
-                  {
-                    "type": "text",
-                    "content": "HARBOR TABLE",
-                    "style": {
-                      "fontSize": 13,
-                      "color": "{{theme.color.onSurfaceVariant}}",
-                      "letterSpacing": 2.4
-                    }
-                  },
-                  {
-                    "type": "text",
-                    "content": "Front door · walk-ins",
-                    "style": {
-                      "fontSize": 22,
-                      "color": "{{theme.color.onSurface}}",
-                      "fontWeight": "bold"
-                    }
+          {
+            "type": "container",
+            "padding": {
+              "left": 24,
+              "right": 24,
+              "top": 10,
+              "bottom": 4
+            },
+            "child": {
+              "type": "linear",
+              "direction": "horizontal",
+              "crossAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "button",
+                  "label": "Counter →",
+                  "variant": "outlined",
+                  "onTap": {
+                    "type": "navigation",
+                    "action": "push",
+                    "route": "/counter"
                   }
-                ],
-                "gap": 4
-              },
-              {
-                "type": "spacer"
-              },
-              {
-                "type": "linear",
-                "direction": "vertical",
-                "children": [
-                  {
-                    "type": "text",
-                    "content": "SHIFT",
-                    "style": {
-                      "fontSize": 11,
-                      "color": "{{theme.color.onSurfaceVariant}}",
-                      "letterSpacing": 1.6
-                    }
-                  },
-                  {
-                    "type": "text",
-                    "content": "{{live.clock}}",
-                    "style": {
-                      "fontSize": 15,
-                      "color": "{{theme.color.onSurface}}",
-                      "fontFamily": "JetBrainsMono"
-                    }
-                  }
-                ],
-                "gap": 4,
-                "crossAxisAlignment": "end"
-              }
-            ]
-          }
-        },
-        {
-          "type": "container",
-          "padding": {
-            "left": 24,
-            "right": 24,
-            "top": 10,
-            "bottom": 4
-          },
-          "child": {
-            "type": "linear",
-            "direction": "horizontal",
-            "crossAxisAlignment": "center",
-            "children": [
-              {
-                "type": "button",
-                "label": "Counter →",
-                "variant": "outlined",
-                "onTap": {
-                  "type": "navigation",
-                  "action": "push",
-                  "route": "/counter"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "container",
-          "padding": {
-            "left": 28,
-            "right": 28,
-            "top": 22,
-            "bottom": 4
+              ]
+            }
           },
-          "child": {
-            "type": "linear",
-            "direction": "horizontal",
-            "crossAxisAlignment": "end",
-            "children": [
-              {
-                "type": "linear",
-                "direction": "vertical",
-                "children": [
-                  {
-                    "type": "text",
-                    "content": "WAITING NOW",
-                    "style": {
-                      "fontSize": 12,
-                      "color": "{{theme.color.onSurfaceVariant}}",
-                      "letterSpacing": 1.8
+          {
+            "type": "container",
+            "padding": {
+              "left": 28,
+              "right": 28,
+              "top": 22,
+              "bottom": 4
+            },
+            "child": {
+              "type": "linear",
+              "direction": "horizontal",
+              "crossAxisAlignment": "end",
+              "children": [
+                {
+                  "type": "linear",
+                  "direction": "vertical",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "WAITING NOW",
+                      "style": {
+                        "fontSize": 12,
+                        "color": "{{theme.color.onSurfaceVariant}}",
+                        "letterSpacing": 1.8
+                      }
+                    },
+                    {
+                      "type": "linear",
+                      "direction": "horizontal",
+                      "crossAxisAlignment": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "content": "{{live.parties}}",
+                          "style": {
+                            "fontSize": 76,
+                            "color": "{{theme.color.onSurface}}",
+                            "fontWeight": "bold",
+                            "fontFamily": "JetBrainsMono"
+                          }
+                        },
+                        {
+                          "type": "container",
+                          "padding": {
+                            "left": 14,
+                            "bottom": 12
+                          },
+                          "child": {
+                            "type": "linear",
+                            "direction": "vertical",
+                            "children": [
+                              {
+                                "type": "text",
+                                "content": "parties",
+                                "style": {
+                                  "fontSize": 16,
+                                  "color": "{{theme.color.onSurfaceVariant}}"
+                                }
+                              },
+                              {
+                                "type": "text",
+                                "content": "{{live.heads}}",
+                                "style": {
+                                  "fontSize": 16,
+                                  "color": "{{theme.color.onSurface}}"
+                                }
+                              }
+                            ],
+                            "gap": 2
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "gap": 2
+                },
+                {
+                  "type": "spacer"
+                },
+                {
+                  "type": "container",
+                  "padding": {
+                    "all": 18
+                  },
+                  "decoration": {
+                    "color": "{{theme.color.surface}}",
+                    "borderRadius": 14,
+                    "border": {
+                      "color": "{{theme.color.outline}}",
+                      "width": 1
                     }
                   },
-                  {
+                  "child": {
                     "type": "linear",
-                    "direction": "horizontal",
-                    "crossAxisAlignment": "end",
+                    "direction": "vertical",
                     "children": [
                       {
                         "type": "text",
-                        "content": "{{live.parties}}",
+                        "content": "ABOUT",
                         "style": {
-                          "fontSize": 76,
-                          "color": "{{theme.color.onSurface}}",
-                          "fontWeight": "bold",
+                          "fontSize": 11,
+                          "color": "{{theme.color.onSurfaceVariant}}",
+                          "letterSpacing": 1.6
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "content": "{{live.estimate}}",
+                        "style": {
+                          "fontSize": 34,
+                          "color": "{{theme.color.primary}}",
                           "fontFamily": "JetBrainsMono"
                         }
                       },
                       {
-                        "type": "container",
-                        "padding": {
-                          "left": 14,
-                          "bottom": 12
-                        },
-                        "child": {
-                          "type": "linear",
-                          "direction": "vertical",
-                          "children": [
-                            {
-                              "type": "text",
-                              "content": "parties",
-                              "style": {
-                                "fontSize": 16,
-                                "color": "{{theme.color.onSurfaceVariant}}"
-                              }
-                            },
-                            {
-                              "type": "text",
-                              "content": "{{live.heads}}",
-                              "style": {
-                                "fontSize": 16,
-                                "color": "{{theme.color.onSurface}}"
-                              }
-                            }
-                          ],
-                          "gap": 2
+                        "type": "text",
+                        "content": "until the next table",
+                        "style": {
+                          "fontSize": 13,
+                          "color": "{{theme.color.onSurfaceVariant}}"
                         }
                       }
-                    ]
+                    ],
+                    "gap": 4
                   }
-                ],
-                "gap": 2
+                }
+              ]
+            }
+          },
+          {
+            "type": "expanded",
+            "child": {
+              "type": "container",
+              "padding": {
+                "left": 28,
+                "right": 28,
+                "top": 18,
+                "bottom": 8
               },
-              {
-                "type": "spacer"
-              },
-              {
+              "child": {
                 "type": "container",
                 "padding": {
                   "all": 18
@@ -239,12 +304,205 @@
                   }
                 },
                 "child": {
+                  "type": "list",
+                  "items": "{{live.rows}}",
+                  "shrinkWrap": true,
+                  "itemSpacing": 10,
+                  "emptyMessage": "No one waiting — walk in",
+                  "itemTemplate": {
+                    "type": "linear",
+                    "direction": "horizontal",
+                    "crossAxisAlignment": "center",
+                    "children": [
+                      {
+                        "type": "container",
+                        "width": 56,
+                        "alignment": "centerStart",
+                        "child": {
+                          "type": "text",
+                          "content": "{{item.ticket}}",
+                          "textAlign": "start",
+                          "maxLines": 1,
+                          "style": {
+                            "fontSize": 15,
+                            "color": "{{theme.color.primary}}",
+                            "textAlign": "start",
+                            "fontFamily": "JetBrainsMono"
+                          }
+                        }
+                      },
+                      {
+                        "type": "box",
+                        "width": 0
+                      },
+                      {
+                        "type": "expanded",
+                        "child": {
+                          "type": "text",
+                          "content": "{{item.name}}",
+                          "style": {
+                            "fontSize": 16,
+                            "color": "{{theme.color.onSurface}}"
+                          }
+                        }
+                      },
+                      {
+                        "type": "box",
+                        "width": 0
+                      },
+                      {
+                        "type": "container",
+                        "width": 80,
+                        "alignment": "centerEnd",
+                        "child": {
+                          "type": "text",
+                          "content": "{{item.party}}",
+                          "textAlign": "end",
+                          "maxLines": 1,
+                          "style": {
+                            "fontSize": 14,
+                            "color": "{{theme.color.onSurfaceVariant}}",
+                            "textAlign": "end",
+                            "fontFamily": "JetBrainsMono"
+                          }
+                        }
+                      },
+                      {
+                        "type": "box",
+                        "width": 0
+                      },
+                      {
+                        "type": "container",
+                        "width": 90,
+                        "alignment": "centerEnd",
+                        "child": {
+                          "type": "text",
+                          "content": "{{item.ahead}}",
+                          "textAlign": "end",
+                          "maxLines": 1,
+                          "style": {
+                            "fontSize": 13,
+                            "color": "{{theme.color.warning}}",
+                            "textAlign": "end",
+                            "fontFamily": "JetBrainsMono"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "container",
+            "padding": {
+              "left": 28,
+              "right": 28,
+              "top": 10,
+              "bottom": 22
+            },
+            "child": {
+              "type": "linear",
+              "direction": "horizontal",
+              "crossAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "content": "{{live.holdRule}}",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "{{theme.color.onSurfaceVariant}}"
+                  }
+                },
+                {
+                  "type": "spacer"
+                },
+                {
+                  "type": "text",
+                  "content": "{{notice}}",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "{{theme.color.primary}}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "crossAxisAlignment": "stretch"
+      }
+    },
+    "else": {
+      "type": "container",
+      "decoration": {
+        "color": "{{theme.color.surfaceContainerHighest}}"
+      },
+      "child": {
+        "type": "linear",
+        "direction": "vertical",
+        "crossAxisAlignment": "stretch",
+        "children": [
+          {
+            "type": "container",
+            "padding": {
+              "left": 28,
+              "right": 28,
+              "top": 24,
+              "bottom": 20
+            },
+            "decoration": {
+              "color": "{{theme.color.surface}}",
+              "border": {
+                "bottom": true,
+                "color": "{{theme.color.outline}}",
+                "width": 1
+              }
+            },
+            "child": {
+              "type": "linear",
+              "direction": "horizontal",
+              "crossAxisAlignment": "center",
+              "children": [
+                {
+                  "type": "expanded",
+                  "child": {
+                    "type": "linear",
+                    "direction": "vertical",
+                    "children": [
+                      {
+                        "type": "text",
+                        "content": "HARBOR TABLE",
+                        "style": {
+                          "fontSize": 13,
+                          "color": "{{theme.color.onSurfaceVariant}}",
+                          "letterSpacing": 2.4
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "content": "Front door · walk-ins",
+                        "style": {
+                          "fontSize": 22,
+                          "color": "{{theme.color.onSurface}}",
+                          "fontWeight": "bold"
+                        }
+                      }
+                    ],
+                    "gap": 4
+                  }
+                },
+                {
+                  "type": "box",
+                  "width": 8
+                },
+                {
                   "type": "linear",
                   "direction": "vertical",
                   "children": [
                     {
                       "type": "text",
-                      "content": "ABOUT",
+                      "content": "SHIFT",
                       "style": {
                         "fontSize": 11,
                         "color": "{{theme.color.onSurfaceVariant}}",
@@ -253,179 +511,360 @@
                     },
                     {
                       "type": "text",
-                      "content": "{{live.estimate}}",
+                      "content": "{{live.clock}}",
                       "style": {
-                        "fontSize": 34,
-                        "color": "{{theme.color.primary}}",
+                        "fontSize": 15,
+                        "color": "{{theme.color.onSurface}}",
                         "fontFamily": "JetBrainsMono"
-                      }
-                    },
-                    {
-                      "type": "text",
-                      "content": "until the next table",
-                      "style": {
-                        "fontSize": 13,
-                        "color": "{{theme.color.onSurfaceVariant}}"
                       }
                     }
                   ],
-                  "gap": 4
+                  "gap": 4,
+                  "crossAxisAlignment": "end"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "expanded",
-          "child": {
-            "type": "container",
-            "padding": {
-              "left": 28,
-              "right": 28,
-              "top": 18,
-              "bottom": 8
-            },
+              ]
+            }
+          },
+          {
+            "type": "expanded",
             "child": {
-              "type": "container",
-              "padding": {
-                "all": 18
-              },
-              "decoration": {
-                "color": "{{theme.color.surface}}",
-                "borderRadius": 14,
-                "border": {
-                  "color": "{{theme.color.outline}}",
-                  "width": 1
-                }
-              },
-              "child": {
-                "type": "list",
-                "items": "{{live.rows}}",
-                "shrinkWrap": true,
-                "itemSpacing": 10,
-                "emptyMessage": "No one waiting — walk in",
-                "itemTemplate": {
+              "type": "scrollView",
+              "children": [
+                {
                   "type": "linear",
-                  "direction": "horizontal",
-                  "crossAxisAlignment": "center",
+                  "direction": "vertical",
+                  "crossAxisAlignment": "stretch",
                   "children": [
                     {
                       "type": "container",
-                      "width": 56,
-                      "alignment": "centerStart",
+                      "padding": {
+                        "left": 24,
+                        "right": 24,
+                        "top": 10,
+                        "bottom": 4
+                      },
                       "child": {
-                        "type": "text",
-                        "content": "{{item.ticket}}",
-                        "textAlign": "start",
-                        "maxLines": 1,
-                        "style": {
-                          "fontSize": 15,
-                          "color": "{{theme.color.primary}}",
-                          "textAlign": "start",
-                          "fontFamily": "JetBrainsMono"
-                        }
+                        "type": "wrap",
+                        "spacing": 8,
+                        "runSpacing": 8,
+                        "children": [
+                          {
+                            "type": "button",
+                            "label": "Counter →",
+                            "variant": "outlined",
+                            "onTap": {
+                              "type": "navigation",
+                              "action": "push",
+                              "route": "/counter"
+                            }
+                          }
+                        ]
                       }
-                    },
-                    {
-                      "type": "box",
-                      "width": 0
-                    },
-                    {
-                      "type": "expanded",
-                      "child": {
-                        "type": "text",
-                        "content": "{{item.name}}",
-                        "style": {
-                          "fontSize": 16,
-                          "color": "{{theme.color.onSurface}}"
-                        }
-                      }
-                    },
-                    {
-                      "type": "box",
-                      "width": 0
                     },
                     {
                       "type": "container",
-                      "width": 80,
-                      "alignment": "centerEnd",
+                      "padding": {
+                        "left": 28,
+                        "right": 28,
+                        "top": 22,
+                        "bottom": 4
+                      },
                       "child": {
-                        "type": "text",
-                        "content": "{{item.party}}",
-                        "textAlign": "end",
-                        "maxLines": 1,
-                        "style": {
-                          "fontSize": 14,
-                          "color": "{{theme.color.onSurfaceVariant}}",
-                          "textAlign": "end",
-                          "fontFamily": "JetBrainsMono"
+                        "type": "linear",
+                        "direction": "vertical",
+                        "crossAxisAlignment": "start",
+                        "spacing": 6,
+                        "children": [
+                          {
+                            "type": "linear",
+                            "direction": "vertical",
+                            "children": [
+                              {
+                                "type": "text",
+                                "content": "WAITING NOW",
+                                "style": {
+                                  "fontSize": 12,
+                                  "color": "{{theme.color.onSurfaceVariant}}",
+                                  "letterSpacing": 1.8
+                                }
+                              },
+                              {
+                                "type": "linear",
+                                "direction": "horizontal",
+                                "crossAxisAlignment": "end",
+                                "children": [
+                                  {
+                                    "type": "text",
+                                    "content": "{{live.parties}}",
+                                    "style": {
+                                      "fontSize": 76,
+                                      "color": "{{theme.color.onSurface}}",
+                                      "fontWeight": "bold",
+                                      "fontFamily": "JetBrainsMono"
+                                    }
+                                  },
+                                  {
+                                    "type": "container",
+                                    "padding": {
+                                      "left": 14,
+                                      "bottom": 12
+                                    },
+                                    "child": {
+                                      "type": "linear",
+                                      "direction": "vertical",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "content": "parties",
+                                          "style": {
+                                            "fontSize": 16,
+                                            "color": "{{theme.color.onSurfaceVariant}}"
+                                          }
+                                        },
+                                        {
+                                          "type": "text",
+                                          "content": "{{live.heads}}",
+                                          "style": {
+                                            "fontSize": 16,
+                                            "color": "{{theme.color.onSurface}}"
+                                          }
+                                        }
+                                      ],
+                                      "gap": 2
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "gap": 2
+                          },
+                          {
+                            "type": "container",
+                            "padding": {
+                              "all": 18
+                            },
+                            "decoration": {
+                              "color": "{{theme.color.surface}}",
+                              "borderRadius": 14,
+                              "border": {
+                                "color": "{{theme.color.outline}}",
+                                "width": 1
+                              }
+                            },
+                            "child": {
+                              "type": "linear",
+                              "direction": "vertical",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "content": "ABOUT",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "color": "{{theme.color.onSurfaceVariant}}",
+                                    "letterSpacing": 1.6
+                                  }
+                                },
+                                {
+                                  "type": "text",
+                                  "content": "{{live.estimate}}",
+                                  "style": {
+                                    "fontSize": 34,
+                                    "color": "{{theme.color.primary}}",
+                                    "fontFamily": "JetBrainsMono"
+                                  }
+                                },
+                                {
+                                  "type": "text",
+                                  "content": "until the next table",
+                                  "style": {
+                                    "fontSize": 13,
+                                    "color": "{{theme.color.onSurfaceVariant}}"
+                                  }
+                                }
+                              ],
+                              "gap": 4
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "padding": {
+                        "left": 28,
+                        "right": 28,
+                        "top": 18,
+                        "bottom": 8
+                      },
+                      "child": {
+                        "type": "container",
+                        "padding": {
+                          "all": 18
+                        },
+                        "decoration": {
+                          "color": "{{theme.color.surface}}",
+                          "borderRadius": 14,
+                          "border": {
+                            "color": "{{theme.color.outline}}",
+                            "width": 1
+                          }
+                        },
+                        "child": {
+                          "type": "list",
+                          "items": "{{live.rows}}",
+                          "shrinkWrap": true,
+                          "itemSpacing": 10,
+                          "emptyMessage": "No one waiting — walk in",
+                          "itemTemplate": {
+                            "type": "linear",
+                            "direction": "vertical",
+                            "crossAxisAlignment": "stretch",
+                            "spacing": 2,
+                            "children": [
+                              {
+                                "type": "linear",
+                                "direction": "horizontal",
+                                "crossAxisAlignment": "center",
+                                "children": [
+                                  {
+                                    "type": "container",
+                                    "width": 56,
+                                    "alignment": "centerStart",
+                                    "child": {
+                                      "type": "text",
+                                      "content": "{{item.ticket}}",
+                                      "textAlign": "start",
+                                      "maxLines": 1,
+                                      "style": {
+                                        "fontSize": 15,
+                                        "color": "{{theme.color.primary}}",
+                                        "textAlign": "start",
+                                        "fontFamily": "JetBrainsMono"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "box",
+                                    "width": 8
+                                  },
+                                  {
+                                    "type": "expanded",
+                                    "child": {
+                                      "type": "text",
+                                      "content": "{{item.name}}",
+                                      "style": {
+                                        "fontSize": 16,
+                                        "color": "{{theme.color.onSurface}}"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "box",
+                                    "width": 8
+                                  },
+                                  {
+                                    "type": "container",
+                                    "width": 80,
+                                    "alignment": "centerEnd",
+                                    "child": {
+                                      "type": "text",
+                                      "content": "{{item.party}}",
+                                      "textAlign": "end",
+                                      "maxLines": 1,
+                                      "style": {
+                                        "fontSize": 14,
+                                        "color": "{{theme.color.onSurfaceVariant}}",
+                                        "textAlign": "end",
+                                        "fontFamily": "JetBrainsMono"
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "linear",
+                                "direction": "horizontal",
+                                "crossAxisAlignment": "center",
+                                "children": [
+                                  {
+                                    "type": "expanded",
+                                    "child": {
+                                      "type": "wrap",
+                                      "spacing": 10,
+                                      "runSpacing": 2,
+                                      "children": []
+                                    }
+                                  },
+                                  {
+                                    "type": "wrap",
+                                    "spacing": 10,
+                                    "runSpacing": 2,
+                                    "children": [
+                                      {
+                                        "type": "container",
+                                        "width": 90,
+                                        "child": {
+                                          "type": "text",
+                                          "content": "{{item.ahead}}",
+                                          "textAlign": "end",
+                                          "maxLines": 1,
+                                          "style": {
+                                            "fontSize": 13,
+                                            "color": "{{theme.color.warning}}",
+                                            "textAlign": "end",
+                                            "fontFamily": "JetBrainsMono"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
                         }
                       }
                     },
                     {
-                      "type": "box",
-                      "width": 0
-                    },
-                    {
                       "type": "container",
-                      "width": 90,
-                      "alignment": "centerEnd",
+                      "padding": {
+                        "left": 28,
+                        "right": 28,
+                        "top": 10,
+                        "bottom": 22
+                      },
                       "child": {
-                        "type": "text",
-                        "content": "{{item.ahead}}",
-                        "textAlign": "end",
-                        "maxLines": 1,
-                        "style": {
-                          "fontSize": 13,
-                          "color": "{{theme.color.warning}}",
-                          "textAlign": "end",
-                          "fontFamily": "JetBrainsMono"
-                        }
+                        "type": "linear",
+                        "direction": "vertical",
+                        "crossAxisAlignment": "start",
+                        "spacing": 6,
+                        "children": [
+                          {
+                            "type": "text",
+                            "content": "{{live.holdRule}}",
+                            "style": {
+                              "fontSize": 14,
+                              "color": "{{theme.color.onSurfaceVariant}}"
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "content": "{{notice}}",
+                            "style": {
+                              "fontSize": 14,
+                              "color": "{{theme.color.primary}}"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
                 }
-              }
+              ]
             }
           }
-        },
-        {
-          "type": "container",
-          "padding": {
-            "left": 28,
-            "right": 28,
-            "top": 10,
-            "bottom": 22
-          },
-          "child": {
-            "type": "linear",
-            "direction": "horizontal",
-            "crossAxisAlignment": "center",
-            "children": [
-              {
-                "type": "text",
-                "content": "{{live.holdRule}}",
-                "style": {
-                  "fontSize": 14,
-                  "color": "{{theme.color.onSurfaceVariant}}"
-                }
-              },
-              {
-                "type": "spacer"
-              },
-              {
-                "type": "text",
-                "content": "{{notice}}",
-                "style": {
-                  "fontSize": 14,
-                  "color": "{{theme.color.primary}}"
-                }
-              }
-            ]
-          }
-        }
-      ],
-      "crossAxisAlignment": "stretch"
+        ]
+      }
     }
   }
 }
